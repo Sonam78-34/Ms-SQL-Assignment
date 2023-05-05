@@ -1,0 +1,117 @@
+select @@SERVERNAME
+create database company
+
+use company
+
+create table employee
+(  eno int not null,
+   ename  varchar(30) not null,
+   job varchar(30) not null,
+   mgr int ,
+   hiredate date not null,
+   sal int not null,
+   comm int ,
+   dept int
+
+);
+
+select * from employee;
+insert into employee( eno,ename,job, mgr,hiredate,sal, dept) values (7369,'Sunita Sharma', 'clerk', 7902, '1980-12-17', 2800, 20); 
+insert into employee values (7499, 'Ashok Singhai' , 'Saleman', 7698, '1980-02-20', 3600, 300, 30);
+insert into employee values (7521,'Rohit Rana', 'Salesman', 7698, '1981-02-22', 5250, 500, 30);
+INSERT INTO EMPLOYEE (ENO, ENAME, JOB, MGR, HIREDATE, SAL, COMM, DEPT)
+VALUES (7566, 'Jyoti Lamba', 'MANAGER', 7839, '1981-04-02', 4975, NULL, 20)
+
+INSERT INTO EMPLOYEE (ENO, ENAME, JOB, MGR, HIREDATE, SAL, COMM, DEPT)
+VALUES 
+(7654,'Martim S.', 'SALESMAN', 7698, '1981-09-28', 6250, 1400, 30),
+(7698, 'Binod Goel', 'MANAGER', 7839, '1981-05-01', 5850, NULL, 30),
+(7782, 'Chetan Gupta', 'MANAGER', 7839, '1981-06-09', 2450, NULL, 10),
+(7788, 'Sudhir Rawat', 'ANALYST', 7566, '1987-04-19', 5000, NULL, 20),
+(7839, 'Kavita Sharma', 'PRESIDENT', NULL, '1981-11-17', 5000, NULL, 10),
+(7844, 'Tushar TIWARI', 'SALESMAN', 7698, '1981-09-08', 4500, 0, 30),
+(7876, 'Anand Rath', 'CLERK', 7788, '1987-05-23', 6100, NULL, 20),
+(7900, 'Jaydeep Rana', 'SALESMAN', 7698, '1981-12-03', 4950, NULL, 30),
+(7902, 'Sumit Vats', 'ANALYST', 7566, '1981-12-03', 3500, 3600, 20),
+(7934, 'Manoj Kaushik', 'CLERK', 7782, '1982-01-23', 5300, NULL, 10);
+
+
+--a
+SELECT * FROM employee
+
+--b
+select ename , eno from employee;
+
+--c
+select ename, hiredate, sal from employee;
+
+--d
+update employee
+set sal= sal+300;
+select ename , sal from employee;
+
+--e
+select ename, sal*12+100 as anualSalary from employee;
+  
+
+--f
+select ename , sal from employee where comm is null;
+
+--g
+select distinct dept from employee;
+
+--h
+select distinct job from employee; 
+
+--i
+select sal from employee where sal<comm ;
+
+--j
+select sal from employee where sal between 3000 and 4000;
+
+--k
+select mgr from employee where mgr= 7902 or mgr= 7566 or mgr = 7788;
+
+--l
+ select ename from employee where ename like 's%'; 
+
+ --m
+ select * from employee where sal> 4100;
+
+ --n
+ select * from employee order by hiredate;
+
+ --o
+ select * from employee order by dept asc , sal desc;
+
+ --p
+ select ename , job from employee where hiredate between '1981-02-20' and '1981-05-01'; 
+
+ --q;
+ select ename , dept from employee where dept between 20 and 30 order by ename
+
+ --r
+ select ename ,sal from employee where sal>1200  and  dept between 10 and 40
+
+ --s
+ select ename ,hiredate  from employee where hiredate like  '1981%';
+
+ --t
+ select * from employee where job <> 'manager';
+
+ --u
+ select ename, sal from employee where sal>comm;
+
+ --v
+ select ename from employee where ename like '_a%';
+
+ --w
+ 
+
+ --x
+ update employee
+ set sal=sal+300 where eno= 7521;
+select sal, ename from employee where eno= 7521;
+
+ 
+ 
