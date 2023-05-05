@@ -1,0 +1,48 @@
+--flight sql query
+
+create database  Airport 
+
+use Airport;
+
+create table flight
+( no int,
+  flightNo varchar(10), 
+  fromCity varchar(20), 
+  toCity varchar(20),  
+  distance int, 
+  seats int, 
+  frequency int
+); 
+ 
+ Insert into flight (no, flightNo, fromCity, toCity,  distance, seats, frequency) values 
+ ( 1, 'T1412', 'Blue Island', 'Yoyo Town', 1500, 210,3),
+ (2, 'A3242', 'Pikswka', 'Yoyo Town', 900, 170, 7),
+ (3, 'T1434', 'Perimila', 'Pikswaka', 1000, 210, 7),
+ (4, 'C3120', 'Ketty Island', 'Blue Island', 1200, 120, 4),
+ (5, 'T1418', 'Jaswaka','Perimila', 500, 120, 3),
+ (6, 'C3120', 'Pikswaka', 'Archie Island', 1000, 170, 4),
+ (7, 'A3232', 'Harappan Valley','Ketty Island', 900, 210, 1),
+ (8, 'T1432', 'Blue Island', 'Harappan Valley', 1200, 120, 2),
+ (9, 'T1618', 'Mumsui', 'Blue Island', 1200, 210, 4);
+
+ select * from flight;
+
+ --a
+ select flightNo from flight where frequency>4;
+
+ --b
+ select flightNo, fromCity, toCity  from flight where fromCity='Blue Island' or toCity ='Blue Island';
+
+ --c
+ select flightNo, seats from flight where  seats>140;
+
+ --d
+ select flightNo, frequency, distance from flight where  distance>900;
+
+ --e
+ select flightno from flight where seats <180 and frequency=1;
+
+ --f
+ UPDATE flight
+SET no=9, flightNo= 'T1618', fromCity='Mumsui', toCity='BlueIsland' , distance = 1200, seats= 210, frequency =4 where  no =9;
+select * from flight;
