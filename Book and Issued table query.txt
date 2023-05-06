@@ -1,0 +1,52 @@
+
+create database  libraries
+use libraries
+
+create table Books(
+id varchar(30),
+BookName varchar(30),
+AuthorName varchar(30),
+Publisher varchar(30),
+Price int,
+Type varchar(30),
+Qty int
+);
+
+insert into Books values ('C0001','fastcook','latakapoor','epb',355,'cookery',5);
+insert into Books values ('F00001','thetears','williamhopkins','firstpubl',650,'fiction',20);
+insert into Books values ('T0001','myfirstc++','brainandbrook','epb',350,'text',10)
+insert into Books values ('T0002','c++brainworks','awrossaine','tdh',350,'text',15);
+insert into Books values ('F0002','thunderbolts','annaroberts','firstpubl',750,'fiction',50);
+
+select * from Books
+
+
+
+create table issued(
+
+BookId varchar(20),
+Quantity int
+);
+
+insert into Issued values('T0001',4);
+insert into Issued values('C0001',5);
+insert into Issued values('F0001',2);
+
+select * from Issued
+
+--a
+select  b.BookName, b.AuthorName, b.Price, i.Quantity from books b INNER JOIN  issued i  on b.Id = i.BookId
+where b.Publisher = 'First Publ';
+
+--b
+select  b.BookName from books b INNER JOIN issued i on b.Id = i.BookId where b.Type = 'text';
+
+--c
+select  BookName, Price from books order by Price ASC;
+
+--d
+UPDATE books
+SET Price = Price + 50
+where  Publisher = 'EPB';
+
+
