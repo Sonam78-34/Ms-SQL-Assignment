@@ -1,0 +1,54 @@
+create database clothCompany
+
+use clothCompany
+
+CREATE TABLE fabric (
+  f_code VARCHAR(10) PRIMARY KEY,
+  type VARCHAR(50)
+);
+
+INSERT INTO fabric (f_code, type) VALUES
+('F04', 'Polyster'),
+('F02', 'Cotton'),
+('F03', 'Silk'),
+('F01', 'Terelene');
+
+
+
+CREATE TABLE garment (
+  gcode VARCHAR(10) PRIMARY KEY,
+  description VARCHAR(255),
+  price DECIMAL(10, 2),
+  fcode VARCHAR(10),
+  ready_date DATE,
+  FOREIGN KEY (fcode) REFERENCES fabric(f_code)
+);
+
+INSERT INTO garment (gcode, description, price, fcode, ready_date) VALUES
+('10023','Pencil Skirt', 1150, 'F03', '10-12-19'),
+('10001', 'Formal Shirt', 1250, 'F01', '10-01-12'),
+(1012 ,'Informak Shirt', 1550, 'F02', '10-01-06')
+
+INSERT INTO garment (gcode, description, price, fcode, ready_date) VALUES
+(10024,'Baby Top', 750, 'F03','07-04-09'),
+(10090, 'Tulip Skirt', 850, 'F02', '09-03-31'),
+(10019, 'Evening Gown', 850, 'F03', '10-06-06'),
+(10009, 'Informal Pant', 1500, 'F02', '10-09-20'),
+(10017,'Formal Pant', 1350, 'F01', '09-03-09'),
+(10020,'Frock', 850, 'F04', '09-08-09'),
+(10089, 'Slacks', 750, 'F03', '10-09-31');
+
+
+select * from garment
+
+select * from fabric
+ 
+ --a
+ select *  from garment  where ready_date between '2009-12-08' and '2010-06-16';
+
+ --b
+ SELECT g.fcode, MAX(g.price) as highPrice, MIN(g.price) as lowesPrice FROM garment g  GROUP BY g.fcode;
+
+ --c
+ 
+select g.gcode, g.description, f.type, g.fcode from garment g INNER JOIN fabric f on g.fcode = f.f_code;
