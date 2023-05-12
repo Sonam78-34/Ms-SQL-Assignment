@@ -1,0 +1,172 @@
+use Games
+
+create table GamesAndSUPWDetails(
+studentno int,
+class int,
+studentname varchar(20),
+game varchar(20),
+gradeone char,
+supw varchar(20),
+gradetwo char
+);
+
+
+insert into GamesAndSUPWDetails values(10,7,'sameer','cricket','B','photography','A');
+insert into GamesAndSUPWDetails values(11,8,'sujit','tennis','A','gardening','C');
+insert into GamesAndSUPWDetails values(12,7,'kamal','swimming','B','photography','B');
+insert into GamesAndSUPWDetails values(13,7,'veena','tennis','C','cooking','A');
+insert into GamesAndSUPWDetails values(14,9,'archana','baseketball','A','literature','A');
+insert into GamesAndSUPWDetails values(15,10,'arpit','cricket','A','gardening','C');
+
+delete from  GamesAndSUPWDetails where studentno=15;
+
+select *from GamesAndSUPWDetails;
+
+--1
+
+create function udfGradeC()
+returns table
+As
+ return (select studentname from GamesAndSUPWDetails where gradeone='C' or gradetwo='C')
+  
+select * from udfGradeC();
+
+drop function udfGradeC
+
+--2
+
+
+create function udfGradeAInCricket()
+returns varchar(20)
+As 
+Begin
+declare @countgrade varchar(20)
+select  @countgrade=studentname from GamesAndSUPWDetails where gradeone='A' and game='cricket'
+return @countgrade
+End
+
+select dbo.udfGradeAInCricket();
+
+DROP FUNCTION udfGradeAInCricket
+
+--3
+
+create function udfDifferentGames()
+returns table
+As
+return (select game from GamesAndSUPWDetails)
+
+
+select *from udfDifferentGames()
+
+drop function udfDifferentGames
+
+
+--4
+
+create function udfSUPMWithA()
+returns table
+As
+return (select studentname from GamesAndSUPWDetails where supw is  not null and studentname like'a%')
+
+select *from udfSUPMWithA()
+
+
+--5)
+
+create function udfArrangeBySupw()
+returns table
+As
+return (select Top 6* from GamesAndSUPWDetails order by supw )
+
+select *from udfArrangeBySupw()
+
+drop function udfArrangeBySupw
+
+
+--6
+
+CREATE FUNCTION add_new_column()
+RETURNS TABLE
+AS
+RETURN
+SELECT studentname,class,studentno,game,gradeone,supw,gradetwo,'newvalue' as marks FROM GamesAndSUPWDetails;
+
+SELECT *
+INTO new_table
+FROM add_new_column();
+
+select *from new_table;
+select *from GamesAndSUPWDetails;
+
+drop function add_new_column
+
+--7
+
+alter table new_table
+MODIFY marks numeric(4,2)
+
+--8
+
+ALTER TABLE new_table
+ALTER COLUMN marks REAL;
+
+SELECT CAST(marks AS REAL) AS my_new_column FROM new_table;
+
+--9
+
+EXEC sp_rename 'new_table.new_table.TotelMarks' ,'TotelMarks';
+
+
+--10
+
+alter table dbo.new_table
+drop column new_tableTotelMarks;
+
+--11
+
+EXEC sp_rename 'GamesAndSUPWDetails' ,'Student_Data'
+
+select *from Student_Data;
+
+--12
+
+update Student_Data
+set 
+supw='cooking'
+where studentno=10
+
+--13
+/*
+create function udfCountgrade()
+returns table
+as
+return (select count(studentno),gradeone from Student_Data group by gradeone)
+
+
+select dbo.udfCountgrade();
+drop function udfCountgrade
+*/
+(select count(studentno),gradeone from Student_Data group by gradeone)
+select *from Student_Data;
+
+--14
+
+create function udfGradeAorC()
+returns table
+as 
+return (select studentname from Student_Data where gradeone='A' or gradeone='C')
+
+select *from udfGradeAorC();
+
+drop function udfGradeAorC
+
+
+--15
+
+delete from  Student_Data
+
+
+--16
+
+drop table Student_Data

@@ -1,0 +1,124 @@
+create database salesdemo
+
+use salesdemo
+
+create table product
+( product_code varchar(20),
+product_name varchar(100),
+price int ,
+quantity_remaining int, 
+quantity_sold int);
+
+
+insert into product values ('p1', 'iPhone 13 pro max', 1200, 5, 195),
+('p2', 'AirPods Pro', 279, 10, 90),
+('p3', 'MacBook Pro 16', 5000, 2, 48),
+('p4', 'iPad Air', 650, 1, 9);
+
+
+create table sales
+(
+order_id int, 
+order_date date,
+product_code varchar(20), 
+quantity_ordered int,
+sale_price  int);
+ 
+
+ insert into  sales values (1, '2022-01-10', 'p1', 100, 120000);
+
+ insert into sales values (2,'2022-01-20', 'p1', 50, 60000),
+ (3,'2022-02-05', 'p1', 45, 540000),
+ (4,'2022-01-15', 'p2', 50, 13950),
+ (5,'2022-03-25', 'p2', 40, 11160),
+ (6,'2022-02-25', 'p3', 10, 50000),
+ (7,'2022-03-15', 'p3', 10, 50000),
+ (8,'2022-03-23', 'p3', 20, 100000),
+ (9,'2022-04-21', 'p3', 8, 40000),
+ (10,'2022-04-27', 'p4', 9, 5850);
+ 
+
+ select * from product;
+ select * from sales;
+
+
+
+ --1 procedure
+
+ alter proc uspupdateiphone13promax
+ @prodcode varchar(10),
+ @prodname varchar(50),
+ @prodprice int, 
+ @quantrem int,
+ @quantsold int
+ as
+ begin
+ update product 
+ set product_code= @prodcode,
+ price =@prodprice,
+ quantity_remaining = @quantrem,
+ quantity_sold= @quantsold
+ where product_name= @prodname
+
+ select @@ROWCOUNT as uspupdateiphone13promax
+ end
+
+ select * from product
+
+ exec uspupdateiphone13promax 'p7', 'iPhone 13 pro max', 2000, 10, 200;
+
+
+ ----2 procedure query
+ select * from sales
+ select * from product
+
+ create proc uspcheckproductavailability
+	@prodcode varchar(10),
+	@prodname varchar(50),
+	@prodprice int,
+	@prodrem int,
+	@prodsold int,
+	@requiredquantity int
+	as
+	Begin
+	 if @prodrem> @requiredquantity
+	  update product
+	  set  price= @prodprice,
+	  product_name= @prodname,
+	  quantity_remaining= @prodrem,
+	  quantity_sold= @prodsold
+	  where product_code = @prodcode;
+
+	end
+	
+	exec  uspcheckproductavailability 'p2','oppo', 1500, 50, 15,30;
+
+
+
+	--create a view
+	--1
+	alter view quantityincreasedby10 as
+	select quantity_remaining+10 as remainquantityincreased from product 
+
+	select * from quantityincreasedby10
+	select * from product
+
+
+
+	--2
+	alter view salepricedisplay
+	 as select product_code,product_name , price from product 
+
+	 select * from salepricedisplay
+
+
+
+	 ---3
+	 select * from sales
+
+	 create view totalsale
+	 as select *  from sales e where order_date>='2022-03-01' and order_date<'2022-04-01';
+
+	 select * from totalsale
+
+

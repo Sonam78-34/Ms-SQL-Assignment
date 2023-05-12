@@ -1,0 +1,162 @@
+
+	 alter PROCEDURE YourStoredProcedureName
+	  @Counter INT,
+    @MaxValue INT,
+    @CurrentRecord INT
+   AS
+   BEGIN
+
+  WHILE @Counter <= @MaxValue
+  BEGIN
+    
+    SET @CurrentRecord = @Counter
+    SET @Counter = @Counter + 1
+	
+  END
+END
+
+exec  YourStoredProcedureName 1, 10,12
+
+
+
+
+
+
+ insession trigger
+
+
+
+
+----trigger
+
+--insert trigger
+
+select * from sales
+
+--create a table which should be trigger
+
+create table salestriggers
+( orderid int,
+insertedby varchar(100));
+
+
+--now create trigger
+alter trigger tgr_insert_sales on sales for insert
+as
+begin
+declare @orderid int
+select @orderid= order_id from inserted 
+insert into salestriggers (orderid, insertedby) values( @orderid, ORIGINAL_LOGIN())
+print 'insert triggered'
+end
+
+select * from sales
+
+insert into sales values(11, '2022-05-25', 'p4', 8,60000);
+
+
+
+
+--delete trigger
+
+create trigger tgr_delete on sales for delete
+as
+begin
+declare @orderid int
+select @orderid= order_id from deleted
+insert into salestriggers (orderid, insertedby) values( @orderid, ORIGINAL_LOGIN())
+print 'insert triggered'
+end
+
+delete from sales where order_id=10;
+
+select * from sales
+
+
+
+
+
+--delete trigger which not allow to delete the table
+
+create trigger tgr_notalloweddelete on sales for delete
+as
+begin 
+rollback
+declare @orderid int
+select @orderid= order_id from deleted
+insert into salestriggers (orderid, insertedby) values( @orderid, ORIGINAL_LOGIN())
+print 'insert triggered'
+end
+
+delete from sales where order_id=5;
+
+select * from sales
+
+
+--to ddl trigger
+
+--table which need to modify
+
+create table altersalestable (orderId int, orderdate date);
+
+create trigger trg_altertable on database for alter_table
+ as
+ begin 
+ rollback
+ print 'it will not allow to alter the table'
+ end
+
+ alter table altersalestable
+ add price int;
+
+ 
+ --to disable the trigger
+
+ disable trigger trg_altertable on database
+
+
+ 
+ enable trigger tgr_notalloweddelete on sales
+
+
+ --disable the trigger which doesn't allow delete
+ disable trigger tgr_notalloweddelete on sales        --delete id=5 exectued
+
+
+ --to see all the trigger
+ select * from sys.triggers
+
+ --to see the specific trigger
+ select * from sys.sql_modules where object_id= object_id('tgr_insert_sales');
+  select * from sys.sql_modules where object_id= object_id('tgr_delete');
+
+
+
+
+
+
+  ---transaction control
+
+  select * from  product
+ begin transaction 
+ insert into product values('p5', 'svmsung',500,2, 3000)
+ commit
+
+
+ --rollback
+ begin transaction 
+ insert into product values('p6','nokia', 200, 3,100);
+ rollback
+
+
+ --commit and rollback both 
+
+ begin transaction 
+ delete from product where product_code='p5'
+ commit
+ begin transaction
+ delete from product where product_name='oppo'
+ rollback
+
+ select * from product
+ 
