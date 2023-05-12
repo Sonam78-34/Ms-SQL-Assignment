@@ -1,0 +1,115 @@
+use Books
+
+create table EmployeeTable
+(empno int ,
+ename varchar(20),
+job varchar(20),
+managerid int,
+hiredate date,
+salary float,
+commission float,
+deptno int
+);
+
+insert into EmployeeTable values (8830,'amir','president',null,'1991-11-10',5000.00,null,10);
+
+select *from EmployeeTable;
+
+
+--1
+
+
+create function udfDisplayTable()
+Returns table
+As
+return select *from EmployeeTable;
+select * from udfDisplayTable();
+
+
+
+--2
+
+
+create function udfUpdateTable(@employeeno int ,@employeename varchar(20) ,@jobrole varchar(20), @managernumber int,@joineddate date,@employeesalary float ,@empcommision float ,@departmentid int)
+
+Returns int
+As
+select 
+insert into EmployeeTable values(8088,'ramesh','clerk',8789,'2022-08-09',4500.00,null,10);
+return select *from 
+
+
+drop function udfUpdateTable;
+
+
+create function udfInsertingIntoTable(@employeeno int ,@employeename varchar(20) ,@jobrole varchar(20), @managernumber int,@joineddate date,@employeesalary float ,@empcommision float ,@departmentid int)
+returns int 
+as
+Begin
+declare @NewTable table(employeeno int ,employeename varchar(20) ,jobrole varchar(20), managernumber int,joineddate date,employeesalary float ,empcommision float ,departmentid int)
+insert into @NewTable values(@employeeno,@employeename,@jobrole,@managernumber,@joineddate,@employeesalary,@empcommision,@departmentid);
+return Scope_identity();
+End
+
+select dbo.udfInsertingIntoTable(8088,'ramesh','clerk',8792,'2022-08-09',4500.00,null,10);
+
+
+--3)--
+
+create function udfCountEmployees()
+returns int 
+As
+Begin
+	declare @count int
+	select @count=count(*) from EmployeeTable
+	return @count
+End
+
+select dbo.udfCountEmployees();
+
+
+---4)--
+
+CREATE FUNCTION dbo.CountValues (@ColumnName NVARCHAR(50), @Value NVARCHAR(50))
+RETURNS TABLE
+AS
+RETURN
+(
+    SELECT COUNT(*) AS ValueCount
+    FROM YourTable
+    WHERE @ColumnName = @Value
+);
+
+SELECT *
+FROM dbo.CountValues('ColumnName', 'Value');
+
+--5)---
+
+create function udfsort()
+returns table
+as 
+return select top 20 *from EmployeeTable order by ename
+
+select *from udfsort();
+
+--6)---
+
+CREATE FUNCTION dbo.updatetable (@empno INT, @salary int)
+RETURNS int
+AS
+BEGIN
+  DECLARE @NewSales int 
+  SELECT @NewSales = salary * @salary FROM EmployeeTable WHERE empno=@empno
+  RETURN @NewSales
+END
+
+
+update EmployeeTable set salary=dbo.updatetable(8888,500) where empno=8888
+
+
+--7)---
+
+delete top (1)  from EmployeeTable  order by empno desc;
+
+
+
